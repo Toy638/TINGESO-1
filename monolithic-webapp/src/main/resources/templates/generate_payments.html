@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Create Student</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    </head>
+
+    <body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Top-Education</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/students/">Estudiantes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/students/new/">Añadir Estudiante</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/fileUpload">Cargar CSV</a>
+                </li>
+
+            </ul>
+        </div>
+    </nav>
+
+
+        <div class = "container-sm" >
+
+            <h1 th:text = "${student.name}"> </h1>
+            <h1 th:text = "${student.lastname}"> </h1>
+
+            <h1> Puede pagar en un máximo de <span th:text="${maxPayments}"></span> cuotas</h1>
+
+
+            <form th:object = "${student}" th:action="@{'/payments/generatePayments/' + ${student.id}}" method="get" >
+
+
+                <div>
+                    <label for="quantifyOfPayments"> Cantidad de pagos </label>
+                    <input name = "cantidadCuotas"  type="number" class="form-control" id="quantifyOfPayments"  placeholder="Ingrese cantidad de cuotas"
+                           min = "1" th:max = "${maxPayments}">
+                </div>
+
+                <button type = "submit" class = "btn btn-primary"> Guardar</button>
+
+            </form>
+
+
+        </div>
+
+    </body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head> 
+    <title>My Web App</title> 
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+</head>
+<body>
+
+
+	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+		<a class="navbar-brand" href="#">Top-Education</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarNav">
+			<ul class="navbar-nav">
+				<li class="nav-item active">
+					<a class="nav-link" href="/students/">Estudiantes</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="/students/form/new">Añadir Estudiante</a>
+				</li>
+
+				<li class="nav-item">
+					<a class="nav-link" href="/fileUpload">Cargar CSV</a>
+				</li>
+
+				<li class="nav-item">
+					<a class="nav-link" href="/fileInformation">Información CSV</a>
+				</li>
+
+
+			</ul>
+		</div>
+	</nav>
+
+
+
+
+
+	<div class="container-sm">
+
+
+		<table class="table">
+    		<thead class="thead-dark">
+    			<tr>
+
+					<th>Informacion</th>
+
+    			</tr>
+    		</thead>
+
+    		<tbody>
+				<tr>
+					<td>Rut</td>
+					<td th:text="${student.rut}"></td>
+				</tr>
+				<tr>
+					<td>Nombre</td>
+					<td th:text="${student.name}"></td>
+				</tr>
+
+				<tr>
+					<td>Apellidos</td>
+					<td th:text="${student.lastname}"></td>
+				</tr>
+
+				<tr>
+					<td>Examenes Rendidos</td>
+					<td th:text="${student.exams_taken}"></td>
+				</tr>
+
+				<tr>
+					<td>Promedio Examenes</td>
+					<td th:text="${student.exam_mean_mark}"></td>
+				</tr>
+
+				<tr>
+					<td>Monto total</td>
+					<td th:text="${student.amount_to_pay}"></td>
+				</tr>
+
+				<tr>
+					<td>Tipo de pago</td>
+					<td>
+						<span th:if="${student.quantity_of_payments} == 1">Contado</span>
+						<span th:if="${student.quantity_of_payments} != 1">Credito</span>
+
+					</td>
+				</tr>
+
+
+
+				<tr>
+					<td>Cantidad Cuotas pactadas</td>
+					<td th:text="${student.quantity_of_payments}"></td>
+				</tr>
+
+				<tr>
+					<td>Cantidad Cuotas pagadas</td>
+					<td th:text="${student.payments_taken}"></td>
+				</tr>
+
+				<tr>
+					<td>Monto total pagado</td>
+					<td th:text="${student.amount_paid}"></td>
+				</tr>
+
+				<tr>
+					<td>Fecha ultimo pago</td>
+					<td th:text="${student.last_payment_date}"></td>
+				</tr>
+
+				<tr>
+					<td>Saldo por pagar</td>
+					<td th:text="${student.pending_amount}"></td>
+				</tr>
+				<tr>
+					<td>N° Cuotas con retraso</td>
+
+				</tr>
+
+
+
+    		</tbody>
+    	</table>
+    </div>
+</body>
+</html>

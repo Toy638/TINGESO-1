@@ -23,15 +23,6 @@ public class UsuarioController {
 	}
 
 
-	@PostMapping("/usuario/nuevo")
-	public UsuarioEntity guardar(Model modelo){
-		UsuarioEntity estudiante = new UsuarioEntity();
-		modelo.addAttribute("estudiante", estudiante);
-		return "crear_estudiante"
-
-
-		return usuarioService.guardarUsuario(usuarioEntityNuevo);
-	}
 
 
 

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Create Student</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+</head>
+<body>
+
+
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Top-Education</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/students/">Estudiantes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/students/form/new">Añadir Estudiante</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/fileUpload">Cargar CSV</a>
+                </li>
+
+            </ul>
+        </div>
+    </nav>
+
+
+    <div class = "container-sm" >
+
+
+
+
+
+
+        <form th:object = "${student}" th:action="@{/student/form/new/submit}"  method = "post" >
+
+
+            <div class="form-group">
+                <label for="Rut"> RUT </label>
+                <input th:field = "*{rut}"  type="text" class="form-control" id="Rut"  placeholder="Ingrese Rut.">
+            </div>
+
+
+            <div class="form-group">
+                <label for="Nombres"> Nombres </label>
+                <input th:field = "*{name}"  type="text" class="form-control" id="Nombres"  placeholder="Ingrese nombres.">
+            </div>
+
+            <div class="form-group">
+                <label for="Apellidos">Apellidos</label>
+                <input th:field = "*{lastname}"  type="text" class="form-control" id="Apellidos"  placeholder="Ingrese apellidos.">
+            </div>
+
+            <div class="form-group">
+                <label for="school">Colegio</label>
+                <input th:field = "*{school}" type="text" class="form-control" id="school" placeholder="Ingrese colegio.">
+            </div>
+
+            <div class="form-group">
+                <label for="school_type">Tipo de Colegio</label>
+                <select th:field = "*{school_type}"  class="form-control" id="school_type">
+                    <option value = "Privado">Privado</option>
+                    <option value = "Subvencionado" >Subvencionado</option>
+                    <option value = "Municipal">Municipal</option>
+                </select>
+            </div>
+
+
+            <div class="form-group">
+                <label for="mean_exam_mark">Promedio examenes</label>       <!-- !!!!! PREGUNTAR PROFE !!!!!  Si es posible usar el min para validacion de formularios -->
+                <input th:field = "*{exam_mean_mark}" type="number" class="form-control" id="mean_exam_mark" placeholder="Ingrese Promedio."  min = "0" step = "1">
+            </div>
+
+
+            <div class="form-group">
+                <label for="graduation_year">Ingrese año de graduación</label>
+                <input th:field = "*{graduation_year}" type="number" class="form-control" id="graduation_year" placeholder="Ingrese año de graduación." min = "0" step = "1">
+            </div>
+
+            <div class="form-group">
+                <label for="birthday">Ingrese fecha Nacimiento: </label>
+                <input th:field = "*{birthdate}" type="Date" class="form-control" id="birthday" placeholder="Ingrese fecha de cumpleaños" pattern="\d{4}-\d{2}-\d{2}" >
+            </div>
+
+
+            <button type="submit" class="btn btn-primary"> Guardar</button>
+
+        </form>
+
+
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head> 
+    <title>My Web App</title> 
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+</head>
+<body>
+
+
+	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+		<a class="navbar-brand" href="#">Top-Education</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarNav">
+			<ul class="navbar-nav">
+				<li class="nav-item active">
+					<a class="nav-link" href="/students/">Estudiantes</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="/students/new/">Añadir Estudiante</a>
+				</li>
+
+				<li class="nav-item">
+					<a class="nav-link" href="/fileUpload">Cargar CSV</a>
+				</li>
+
+			</ul>
+		</div>
+	</nav>
+
+
+
+
+
+	<div class="container-sm">
+
+
+		<table class="table">
+    		<thead class="thead-dark">
+    			<tr>
+
+					<th>Rut</th>
+					<th>Monto</th>
+					<th>Estado</th>
+					<th>Fecha vencimiento</th>
+					<th>Descuento Base</th>
+					<th>Descuento Puntaje</th>
+					<th>Porcentaje interes</th>
+					<th>Valor interes</th>
+					<th>Total a pagar</th>
+
+
+    			</tr>
+    		</thead>
+			<tbody>
+
+				<tr th:each="payment:${payments}">
+					<td th:text="${payment.rut}" ></td>
+					<td th:text="${payment.amount}" ></td>
+					<td th:text="${payment.status}" ></td>
+					<td th:text="${payment.paymentDate}" ></td>
+					<td th:text="${payment.baseDiscountValue}" ></td>
+					<td th:text="${payment.markDiscountValue}" ></td>
+					<td th:text="${payment.interestRate}" ></td>
+					<td th:text="${payment.interestValue}" ></td>
+
+					<td th:text="${payment.totalAmount}" ></td>
+
+
+				</tr>
+			</tbody>
+					<td>
+						<a class="btn btn-primary" th:href="@{/payments/pay/{id}(id =${payments[0].id}) } " role="button">Pagar</a>
+					</td>
+
+    	</table>
+    </div>
+</body>
+</html>

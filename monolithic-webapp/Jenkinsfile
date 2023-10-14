@@ -1,0 +1,48 @@
+pipeline{
+    agent any
+    tools{
+        maven "maven"
+    }
+    stages{
+        stage("Build JAR File"){
+            steps{
+                checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/Toy638/TINGESO-1.git']])
+                dir("monolithic-webapp"){
+                    sh "mvn clean install"
+                }
+            }
+        }
+        stage("Test"){
+            steps{
+                dir("monolithic-webapp"){
+                    sh "mvn test"
+                }
+            }
+        }
+        stage("Build Docker Image"){
+            steps{
+                dir("monolithic-webapp"){
+                    sh "docker build -t spl1nt3rx/tingeso1 ."
+                }
+            }
+        }
+        stage("Push Docker Image"){
+            steps{
+                dir("monolithic-webapp"){
+                    withCredentials([string(credentialsId: 'dckrhubpassword', variable: 'dckpass')]) {
+                        sh "docker login -u spl1nt3rx -p ${dckpass}"
+                    }
+                    sh "docker push spl1nt3rx/tingeso1"
+                }
+                
+            }
+        }
+    }
+    post{
+        always{
+            dir("monolithic-webapp"){
+                sh "docker logout"
+            }
+        }
+    }
+}

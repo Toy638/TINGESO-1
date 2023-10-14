@@ -6,7 +6,7 @@ pipeline{
     stages{
         stage("Build JAR File"){
             steps{
-                checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/Toy638/TINGESO-1.git']])
+                checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/Toy638/TINGESO-1']])
                 dir("monolithic-webapp"){
                     sh "mvn clean install"
                 }

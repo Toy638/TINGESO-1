@@ -1,15 +1,25 @@
 package edu.mtisw.monolithicwebapp;
 
+import edu.mtisw.monolithicwebapp.entities.ExamEntity;
 import edu.mtisw.monolithicwebapp.entities.PaymentEntity;
 import edu.mtisw.monolithicwebapp.entities.StudentEntity;
+
+import edu.mtisw.monolithicwebapp.repositories.ExamRepository;
 import edu.mtisw.monolithicwebapp.repositories.PaymentRepository;
+import edu.mtisw.monolithicwebapp.services.ExamService;
 import edu.mtisw.monolithicwebapp.services.PaymentService;
 import edu.mtisw.monolithicwebapp.services.StudentService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -19,24 +29,35 @@ import static org.mockito.Mockito.*;
 @SpringBootTest
 public class PaymentServiceTest {
 
-    @Autowired
+
+    @InjectMocks
     private PaymentService paymentService;
 
-    @Autowired
+    @InjectMocks
+    private ExamService examService;
+
+    @InjectMocks
     private StudentService studentService;
 
-    @Autowired
+
+    @Mock
     private PaymentRepository paymentRepository;
 
+    @Mock
+    private ExamRepository examServiceMock;
 
+
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.initMocks(this);
+    }
     @Test
     public void testIsUnpaid_PaymentIsPaidAndExpirationDateBeforeToday_ReturnsFalse() {
         PaymentEntity payment = new PaymentEntity();
         payment.setStatus(PaymentEntity.status.PAGADO);
-
         LocalDate expirationDate = LocalDate.now().minusDays(1);
         LocalDate today = LocalDate.now();
-
         boolean result = paymentService.isUnpaid(payment, expirationDate, today);
 
         assertFalse(result);
@@ -306,6 +327,171 @@ public class PaymentServiceTest {
         assertTrue(result);
     }
 
+
+    @Test
+    public void testCountAndMarkUnpaidMonths_EmptyPaymentsList_ReturnsZero() {
+        ArrayList<PaymentEntity> payments = new ArrayList<>();
+        LocalDate today = LocalDate.now();
+
+        int result = paymentService.countAndMarkUnpaidMonths(payments, today);
+
+        assertEquals(0, result);
+    }
+
+
+    @Test
+    public void testCountAndMarkUnpaidMonths_AllPaymentsArePaid_ReturnsZero() {
+        PaymentEntity payment1 = new PaymentEntity();
+        payment1.setStatus(PaymentEntity.status.PAGADO);
+        PaymentEntity payment2 = new PaymentEntity();
+        payment2.setStatus(PaymentEntity.status.PAGADO);
+        ArrayList<PaymentEntity> payments = new ArrayList<>(Arrays.asList(payment1, payment2));
+        LocalDate today = LocalDate.now();
+
+        int result = paymentService.countAndMarkUnpaidMonths(payments, today);
+
+        assertEquals(0, result);
+    }
+
+
+    @Test
+    public void testCountAndMarkUnpaidMonths_SomePaymentsAreUnpaid_ReturnsCount() {
+        PaymentEntity payment1 = new PaymentEntity();
+        payment1.setStatus(PaymentEntity.status.PENDIENTE);
+        payment1.setPaymentDate(LocalDate.now().minusMonths(1)); // Fecha anterior a 'today'
+
+        PaymentEntity payment2 = new PaymentEntity();
+        payment2.setStatus(PaymentEntity.status.PAGADO);
+        payment2.setPaymentDate(LocalDate.now().minusMonths(1)); // Fecha anterior a 'today'
+
+
+        PaymentEntity payment3 = new PaymentEntity();
+        payment3.setStatus(PaymentEntity.status.ATRASADO);
+        payment3.setPaymentDate(LocalDate.now().minusMonths(2)); // Fecha anterior a 'today'
+
+        ArrayList<PaymentEntity> payments = new ArrayList<>(Arrays.asList(payment1, payment2, payment3));
+        LocalDate today = LocalDate.now();
+
+        int result = paymentService.countAndMarkUnpaidMonths(payments, today);
+
+        assertEquals(2, result); // Dos pagos están atrasados
+    }
+
+
+    @Test
+    public void testGetPayments_NoPayments_ReturnsEmptyList() {
+        when(paymentRepository.findAll()).thenReturn(new ArrayList<>());
+
+        ArrayList<PaymentEntity> payments = paymentService.getPayments();
+
+        assertEquals(0, payments.size());
+    }
+
+    @Test
+    public void testGetPayments_SomePayments_ReturnsList() {
+        PaymentEntity payment1 = new PaymentEntity();
+        PaymentEntity payment2 = new PaymentEntity();
+        ArrayList<PaymentEntity> mockPayments = new ArrayList<>(Arrays.asList(payment1, payment2));
+
+        when(paymentRepository.findAll()).thenReturn(mockPayments);
+
+        ArrayList<PaymentEntity> payments = paymentService.getPayments();
+
+        assertEquals(2, payments.size());
+    }
+
+    @Test
+
+    public void testGetPaymentsByRut() {
+
+
+        String rut = "123456789";
+        PaymentEntity payment1 = new PaymentEntity();
+        payment1.setRut(rut);
+        PaymentEntity payment2 = new PaymentEntity();
+        payment2.setRut(rut);
+        ArrayList<PaymentEntity> expectedPayments = new ArrayList<>(Arrays.asList(payment1, payment2));
+
+        when(paymentRepository.findByRut(rut)).thenReturn(expectedPayments);
+
+        ArrayList<PaymentEntity> result = paymentService.getByRut(rut);
+
+        assertEquals(expectedPayments, result);
+    }
+
+
+    @Test
+    public void testGetPaymentById() {
+
+        Long paymentId = 1L;
+        PaymentEntity expectedPayment = new PaymentEntity();
+        expectedPayment.setId(paymentId);
+
+
+        when(paymentRepository.findById(paymentId)).thenReturn(Optional.of(expectedPayment));
+
+        // Llama a la función que se va a probar
+        Optional<PaymentEntity> result = paymentService.getById(paymentId);
+
+        // Verifica que la función devuelva el pago esperado
+        assertTrue(result.isPresent());  // Asegura que se devolvió un valor presente
+        assertEquals(expectedPayment, result.get());
+    }
+
+    @Test
+    public void testGetPaymentById_NonExistentId() {
+
+        Long nonExistentId = 999L;
+
+
+        when(paymentRepository.findById(nonExistentId)).thenReturn(Optional.empty());
+
+
+        Optional<PaymentEntity> result = paymentService.getById(nonExistentId);
+
+
+        assertFalse(result.isPresent());
+    }
+
+
+    @Test
+    public void testDeletePayment_Success() {
+        Long paymentId = 1L;
+
+        doNothing().when(paymentRepository).deleteById(paymentId);
+
+        boolean result = paymentService.deletePayment(paymentId);
+
+        assertTrue(result);
+
+        verify(paymentRepository).deleteById(paymentId);
+    }
+
+
+    @Test
+    public void testSavePayment_Success() {
+        PaymentEntity payment = new PaymentEntity();
+        payment.setId(1L); // Establece un ID simulado
+
+        when(paymentRepository.save(payment)).thenReturn(payment);
+
+        PaymentEntity result = paymentService.savePayment(payment);
+
+        assertNotNull(result);
+
+        verify(paymentRepository).save(payment);
+    }
+
+    @Test
+    public void testApplyInterest_NoPayments() {
+        // Simula que no se encontraron pagos para el rut proporcionado
+        when(paymentRepository.findByRut(eq("123456789"))).thenReturn(new ArrayList<>());
+
+        ArrayList<PaymentEntity> result = paymentService.applyInterest("123456789");
+
+        // Verifica que el resultado sea una lista vacía
+        assertTrue(result.isEmpty());
+    }
 
 
 }

@@ -45,6 +45,9 @@ public class PaymentController {
     @GetMapping("/payments/")
     public String listar(Model myModel){
         ArrayList<PaymentEntity> payments = paymentService.getPayments();
+        if(payments.isEmpty()){
+            return "redirect:/students/";
+        }
         myModel.addAttribute("payments", payments);
         return "payments";
     }
@@ -85,6 +88,9 @@ public class PaymentController {
         paymentService.applyDiscountByMark(student.getRut());
         paymentService.applyInterest(student.getRut());
         ArrayList<PaymentEntity> payments = paymentService.getByRut(student.getRut());
+        if(payments.isEmpty()){
+            return "redirect:/students/";
+        }
         myModel.addAttribute("payments", payments);
         return "pay";
     }

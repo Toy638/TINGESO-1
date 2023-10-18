@@ -161,7 +161,8 @@ public class PaymentService {
             }
         }
 
-        return null;
+        paymentRepository.saveAll(payments);
+        return payments;
 
     }
 
@@ -301,24 +302,6 @@ public class PaymentService {
 
             }
 
-
-        /*
-        if(today.getDayOfMonth() <= 10 && today.getDayOfMonth() >= 5){
-            Optional<PaymentEntity> payment = paymentRepository.findById(id);
-            if(payment.isPresent()){
-
-                StudentEntity student = studentService.getByRut(payment.get().getRut());
-                student.setPayments_taken(student.getPayments_taken() + 1);
-                PaymentEntity payment_No_Null = payment.get();
-                payment_No_Null.setStatus(PaymentEntity.status.PAGADO);
-                paymentRepository.save(payment_No_Null);
-                studentService.saveStudent(student);
-
-            }
-
-        }
-         */
-
         }
         paymentRepository.saveAll(payments);
 
@@ -333,7 +316,7 @@ public class PaymentService {
             StudentEntity student_no_null = student.get();
             ArrayList<PaymentEntity> payments = paymentRepository.findByRut(student.get().getRut());
             ArrayList<ExamEntity> exams = examService.getByRut(student.get().getRut());
-            if( !payments.isEmpty()  && !exams.isEmpty()){
+            if( !payments.isEmpty() ){
 
                 int totalPaymentsPaid = 0;
                 int pendingPayments = 0;
@@ -344,11 +327,11 @@ public class PaymentService {
                 int unpaidMonths = countAndMarkUnpaidMonths(payments, today);
                 double mean = 0;
 
-
+                System.out.println("for");
                 for (PaymentEntity payment :
                         payments) {
                     if (payment.getStatus().equals(PaymentEntity.status.PAGADO)) {
-
+                        System.out.println("pagado");
                         totalPaymentsPaid++;
                         totalAmountPaid += payment.getAmount();
                         totalAmountToPay += payment.getTotalAmount();
@@ -377,6 +360,7 @@ public class PaymentService {
                 student_no_null.setPending_amount((int) (student_no_null.getAmount_to_pay() - totalAmountPaid));
 
             }
+            System.out.println("Estudiante Guardado");
             studentService.saveStudent(student_no_null);
             return  student_no_null;
         }

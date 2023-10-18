@@ -8,27 +8,32 @@
 <body>
 
 
-	<nav class="navbar navbar-expand-lg navbar-light bg-light">
-		<a class="navbar-brand" href="#">Top-Education</a>
-		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"></span>
-		</button>
-		<div class="collapse navbar-collapse" id="navbarNav">
-			<ul class="navbar-nav">
-				<li class="nav-item active">
-					<a class="nav-link" href="/students/">Estudiantes</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="/students/new/">Añadir Estudiante</a>
-				</li>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+	<a class="navbar-brand" href="#">Top-Education</a>
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+	</button>
+	<div class="collapse navbar-collapse" id="navbarNav">
+		<ul class="navbar-nav">
+			<li class="nav-item active">
+				<a class="nav-link" href="/students/">Estudiantes</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="/students/form/new">Añadir Estudiante</a>
+			</li>
 
-				<li class="nav-item">
-					<a class="nav-link" href="/fileUpload">Cargar CSV</a>
-				</li>
+			<li class="nav-item">
+				<a class="nav-link" href="/fileUpload">Cargar CSV</a>
+			</li>
 
-			</ul>
-		</div>
-	</nav>
+			<li class="nav-item">
+				<a class="nav-link" href="/fileInformation">Información CSV</a>
+			</li>
+
+
+		</ul>
+	</div>
+</nav>
 
 
 
@@ -47,7 +52,6 @@
 					<th>Fecha vencimiento</th>
 					<th>Descuento Base</th>
 					<th>Descuento Puntaje</th>
-					<th>Porcentaje interes</th>
 					<th>Valor interes</th>
 					<th>Total a pagar</th>
 
@@ -63,7 +67,6 @@
 					<td th:text="${payment.paymentDate}" ></td>
 					<td th:text="${payment.baseDiscountValue}" ></td>
 					<td th:text="${payment.markDiscountValue}" ></td>
-					<td th:text="${payment.interestRate}" ></td>
 					<td th:text="${payment.interestValue}" ></td>
 
 					<td th:text="${payment.totalAmount}" ></td>

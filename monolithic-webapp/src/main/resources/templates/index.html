@@ -69,6 +69,7 @@
 					<td>
     					<a class="btn btn-primary" th:href="@{/payments/new/{id}(id=${usuario.id})}" role="button">Generar cuotas</a>
 						<a class="btn btn-primary" th:href="@{/payments/pay/calc/{id}(id=${usuario.id})}" role="button">Pagar</a>
+    					<a class="btn btn-primary" th:href = "@{/student/report/{id}(id=${usuario.id})}" role="button">Reporte</a>
     					<a class="btn btn-danger" th:href = "@{/student/delete/{id}(id=${usuario.id})}" role="button">Eliminar</a>
     				</td>
 
